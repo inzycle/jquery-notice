@@ -1,0 +1,12 @@
+button { padding: 10px 15px; cursor: pointer; }
+
+.cls, .din { float: left; margin-top: 10px; margin-right: 10px; background: #000000; padding: 30px; }
+
+    .cls:first-child,
+    .din:first-child { margin-left: 10px; }
+
+    .din { background: #b40000; }
+
+.control { padding: 10px; }
+
+    .control p { font-weight: bold; text-transform: uppercase; font-size: 12px; margin-bottom: 5px; }

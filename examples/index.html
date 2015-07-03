@@ -1,0 +1,210 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>jQuery Notice</title>
+    <meta name="description" content="inZycle - jQuery plugin: jQuery Notice">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="reset.min.css" />
+    <link rel="stylesheet" type="text/css" href="../src/jquery.notice.css" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+</head>
+<body>
+
+    <!--[if lt IE 8]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <main id="main">
+
+        <div class="control notice_stick">
+            <p>Stick</p>
+            <button class="add_new_high">High</button>
+            <button class="add_new_normal">Normal</button>
+            <button class="add_new_low">Low</button>
+        </div>
+
+        <div class="control notice_normal">
+            <p>Normal</p>
+            <button class="add_new_high">High</button>
+            <button class="add_new_normal">Normal</button>
+            <button class="add_new_low">Low</button>
+        </div>
+
+    </main>
+
+    <div class="jq-notice align-right align-bottom">
+        <div class="jq-notice-stick jq-notice-scroll">
+            <div class="jq-notice-content">
+                <!-- jQuery Notice Stick Zone -->
+            </div>
+        </div>
+        <div class="jq-notice-list jq-notice-scroll">
+            <div class="jq-notice-content">
+                <!-- jQuery Notice List Zone -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Resources -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!--
+    <script src="../src/jquery.notice.js"></script>
+    -->
+    <script type="text/javascript">
+
+        var _notice_events = [],
+            _notice_action = false;
+
+        var div_stick = $('.jq-notice-stick .jq-notice-content'),
+            div_list = $('.jq-notice-list .jq-notice-content');
+
+        $(document).ready(function(){
+
+            $('.notice_stick .add_new_high').on('click', function(){
+
+                notice('Test Notice',{
+                    priority: 'high',
+                    stick: true,
+                    callback: function(){ console.log('Finished: stick + high') }
+                });
+
+            });
+
+            $('.notice_stick .add_new_normal').on('click', function(){
+
+                notice('Test Notice',{
+                    priority: 'normal',
+                    stick: true,
+                    callback: function(){ console.log('Finished: stick + normal') }
+                });
+
+            });
+
+            $('.notice_stick .add_new_low').on('click', function(){
+
+                notice('Test Notice',{
+                    priority: 'low',
+                    stick: true,
+                    callback: function(){ console.log('Finished: stick + low') }
+                });
+
+            });
+
+            $('.notice_normal .add_new_high').on('click', function(){
+
+                notice('Test Notice',{
+                    priority: 'high',
+                    callback: function(){ console.log('Finished: list + high') }
+                });
+
+            });
+
+            $('.notice_normal .add_new_normal').on('click', function(){
+
+                notice('Test Notice',{
+                    priority: 'normal',
+                    callback: function(){ console.log('Finished: list + normal') }
+                });
+
+            });
+
+            $('.notice_normal .add_new_low').on('click', function(){
+
+                notice('Test Notice',{
+                    priority: 'low',
+                    callback: function(){ console.log('Finished: list + low') }
+                });
+
+            });
+
+        });
+
+        function notice(text,options){
+
+            var defaults = {
+                delay: 2000,
+                speed: 1000,
+                stick: false,
+                priority: 'normal',
+                callback: function(){}
+            };
+
+            var settings = $.extend({}, defaults, options);
+
+            var _notice = notice_factory(text, settings.delay, settings.speed, settings.stick, settings.priority, settings.callback);
+
+            if ( settings.stick ){
+                div_stick.append(_notice);
+            } else {
+                div_list.append(_notice);
+            }
+
+            if ( ! _notice_action ){ notice_next(); }
+
+        }
+
+        function notice_factory(text, delay, speed, stick, priority, callback) {
+
+            var obj = $('<div>').addClass('jq-notice-item-wrap')
+                .append($('<div>').addClass('jq-notice-item').addClass('priority-' + priority)
+                    .append($('<span>').addClass('jq-notice-item-content').text(text))
+                    .append($('<span>').addClass('jq-notice-item-close'))
+                );
+
+            if ( stick ){
+
+                var obj_close = obj.children().children('.jq-notice-item-close');
+
+                obj_close.on('click.jq-notice-item-close', function(e) {
+
+                    e.preventDefault();
+
+                    var _notice = $(this).parents('.jq-notice-item-wrap');
+
+                    _notice.animate({                   // Manual Remove, ToDO: Need more options
+                        opacity: 0
+                    }, speed, function(){
+                        obj.remove();                   // Step 1: remove html element
+                        callback();                     // Step 2: execute possible callback
+                    });
+
+                });
+
+
+            } else {
+
+                var fn = function(){                    // Automatic Remove, ToDO: Need more options
+                    obj.delay(delay).animate({
+                        opacity: 0
+                    }, speed, function(){
+                        _notice_events.splice(0,1);     // Step 1: remove event from tail and re-sort
+                        obj.remove();                   // Step 2: remove html element
+                        callback();                     // Step 3: execute possible callback
+                        _notice_action = false;         // Step 4: update global flag ( executioner )
+                        notice_next();                  // Step 5: execute next animation ( sequencer )
+                    });
+                };
+
+                _notice_events.push(fn);
+
+            }
+
+            return obj
+
+        }
+
+        function notice_next(){
+            if ( _notice_events.length ) {
+                _notice_action = true;
+                _notice_events[0]();
+            } else {
+                _notice_action = false;
+            }
+        }
+
+    </script>
+
+</body>
+</html>
