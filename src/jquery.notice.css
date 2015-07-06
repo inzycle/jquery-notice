@@ -15,15 +15,15 @@
         .jq-notice.align-right .jq-notice-item { float: right; }
 
 
-    .jq-notice-stick { /**/ } /* 36px * n + 1px */
+    .jq-notice-stick { /**/ } /* 31px * n + 1px */
 
-        .jq-notice-stick .jq-notice-item { padding: 10px 25px 10px 15px; }
+        .jq-notice-stick .jq-notice-item { padding: 5px 25px 5px 10px; }
 
             .jq-notice-list .jq-notice-item-close { display: block; }
 
-    .jq-notice-list { max-height: 145px; overflow: hidden; } /* 36px * n + 1px */
+    .jq-notice-list { max-height: 145px; overflow: hidden; } /* 31px * n + 1px */
 
-        .jq-notice-list .jq-notice-item { padding: 10px 15px; }
+        .jq-notice-list .jq-notice-item { padding: 5px 10px; }
 
             .jq-notice-list .jq-notice-item-close { display: none; }
 
@@ -36,10 +36,10 @@
     .jq-notice-item {
         position: relative;
         text-align: left;
-        -moz-border-radius: 20px;
-        -webkit-border-radius: 20px;
-        -khtml-border-radius: 20px;
-        border-radius: 20px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -khtml-border-radius: 10px;
+        border-radius: 10px;
     } .jq-notice-item:first-child { margin-top: 0; }
 
 
@@ -59,17 +59,17 @@
         .jq-notice-item-content { white-space: pre; }
 
         .jq-notice-item-close {
-            position: absolute; top: 0; right: 0;
-            padding: 3px 6px 2px 5px;
-            text-align: center; font-size: 12px; font-weight: bold; font-family: "Courier New", Courier, monospace; color: #ffffff;
+            position: absolute; top: 3px; right: 3px;
+            padding: 2px 5px;
+            text-align: center; font-size: 11px; font-weight: bold; font-family: "Courier New", Courier, monospace; color: #ffffff;
             cursor: pointer;
-            -moz-border-radius: 0 10px 0 0;
-            -webkit-border-radius: 0 10px 0 0;
-            -khtml-border-radius: 0 10px 0 0;
-            border-radius: 0 10px 0 0;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            -khtml-border-radius: 10px;
+            border-radius: 10px;
         } .jq-notice-item-close:after { content: "x"; }
 
-    .jq-notice-scroll { max-height: 109px; overflow-y: scroll; }
+    .jq-notice-scroll { max-height: 79px; overflow-y: scroll; }
 
         .jq-notice-scroll .jq-notice-content { margin-right: 5px; }
 
