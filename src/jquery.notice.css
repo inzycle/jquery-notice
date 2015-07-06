@@ -4,6 +4,7 @@
     font-size: 11px;
 }
 
+    .jq-notice .jq-inactive { display: none; }
 
     .jq-notice.align-top { top: 20px; }
     .jq-notice.align-bottom { bottom: 20px; }
