@@ -160,7 +160,6 @@
                 _notice_action = true;
                 _notice_events[0]();
             } else {
-                $('.' + CLASS_DIV).remove();
                 _notice_action = false;
             }
         }
