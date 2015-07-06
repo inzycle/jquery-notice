@@ -70,7 +70,7 @@
             border-radius: 10px;
         } .jq-notice-item-close:after { content: "x"; }
 
-    .jq-notice-scroll { max-height: 79px; overflow-y: scroll; }
+    .jq-notice-scroll { /* max-height: 79px; overflow-y: scroll; */ }
 
         .jq-notice-scroll .jq-notice-content { margin-right: 5px; }
 

@@ -32,6 +32,7 @@
             speed: 1000,
             stick: false,
             priority: 'normal',
+            url: null,
             callback: function(){}
         },
         settings = {},
@@ -60,7 +61,7 @@
             $('body').append($div);
         }
 
-        var _notice = _notice_factory(text, settings.delay, settings.speed, settings.stick, settings.priority, settings.callback);
+        var _notice = _notice_factory(text, settings.delay, settings.speed, settings.stick, settings.priority, settings.url, settings.callback);
 
         if ( settings.stick ){
             $(div_stick).append(_notice);
@@ -112,13 +113,19 @@
 
         }
 
-        function _notice_factory(text, delay, speed, stick, priority, callback) {
+        function _notice_factory(text, delay, speed, stick, priority, url, callback) {
 
             var obj = $('<div>').addClass(CLASS_ITEM_WRAP)
                 .append($('<div>').addClass(CLASS_ITEM).addClass('priority-' + priority)
-                    .append($('<span>').addClass(CLASS_ITEM_CONTENT).text(text))
+                    .append($('<span>').addClass(CLASS_ITEM_CONTENT))
                     .append($('<span>').addClass(CLASS_ITEM_CLOSE))
             );
+
+            if ( url ){
+                $('<a>').prop('href',url).text(text).appendTo( obj.find('.' + CLASS_ITEM_CONTENT) );
+            } else {
+                obj.find('.' + CLASS_ITEM_CONTENT).text(text);
+            }
 
             if ( stick ){
 
