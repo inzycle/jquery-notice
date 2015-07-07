@@ -48,17 +48,16 @@
 
         }, settings_notice = {},
         $div = $('<div>').addClass(CLASS_DIV).append(
-            $('<div>').addClass(CLASS_STICK).addClass(CLASS_SCROLL).append(
+            $('<div>').addClass(CLASS_LIST).addClass(CLASS_SCROLL).append(
                 $('<div>').addClass(CLASS_CONTENT)
             )
         ).append(
-            $('<div>').addClass(CLASS_LIST).addClass(CLASS_SCROLL).append(
+            $('<div>').addClass(CLASS_STICK).addClass(CLASS_SCROLL).append(
                 $('<div>').addClass(CLASS_CONTENT)
             )
         ),
         div_stick = '.' + CLASS_STICK + ' .' + CLASS_CONTENT,
         div_list = '.' + CLASS_LIST + ' .' + CLASS_CONTENT,
-        _notice_sticks = [],
         _notice_events = [],
         _notice_action = false;
 
