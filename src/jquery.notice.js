@@ -156,16 +156,21 @@
                         obj.find('.' + CLASS_ITEM_CLOSE).addClass(CLASS_ITEM_CLOSE_BLOCK);
                     }
 
-                if ( options.id ){
-                    obj.prop('id','jq-notice-' + options.id);
-                } else {
-                    obj.prop('id', 'jq-notice-' + $.now());
-                }
-
                 if ( options.url ){
                     $('<a>').prop('href',options.url).text(text).appendTo( obj.find('.' + CLASS_ITEM_CONTENT) );
                 } else {
                     obj.find('.' + CLASS_ITEM_CONTENT).text(text);
+                }
+
+                if ( options.id ){
+                    obj.prop('id','jq-notice-' + options.id);
+                    obj.find('.' + CLASS_ITEM_CLOSE).attr('data-id',options.id);
+                    if ( options.url ){ obj.find('a').attr('data-id',options.id); }
+                } else {
+                    var _now = $.now();
+                    obj.prop('id', 'jq-notice-' + _now);
+                    obj.find('.' + CLASS_ITEM_CLOSE).attr('data-id',_now);
+                    if ( options.url ){ obj.find('a').attr('data-id',_now); }
                 }
 
                 if ( options.stick ){
