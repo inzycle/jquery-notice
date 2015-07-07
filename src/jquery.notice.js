@@ -22,7 +22,9 @@
         CLASS_ITEM_WRAP = 'jq-notice-item-wrap',
         CLASS_ITEM = 'jq-notice-item',
         CLASS_ITEM_CONTENT = 'jq-notice-item-content',
-        CLASS_ITEM_CLOSE = 'jq-notice-item-close';
+        CLASS_ITEM_CLOSE = 'jq-notice-item-close',
+        CLASS_ITEM_CLOSE_WHITE = 'close-white',
+        CLASS_ITEM_CLOSE_BLOCK = 'close-block';
 
     var defaults_general = {
 
@@ -47,7 +49,16 @@
             callback: function(){}
 
         }, settings_notice = {},
-        $div = $('<div>').addClass(CLASS_DIV).append(
+        $div_top = $('<div>').addClass(CLASS_DIV).append(
+            $('<div>').addClass(CLASS_STICK).addClass(CLASS_SCROLL).append(
+                $('<div>').addClass(CLASS_CONTENT)
+            )
+        ).append(
+            $('<div>').addClass(CLASS_LIST).addClass(CLASS_SCROLL).append(
+                $('<div>').addClass(CLASS_CONTENT)
+            )
+        ),
+        $div_bottom = $('<div>').addClass(CLASS_DIV).append(
             $('<div>').addClass(CLASS_LIST).addClass(CLASS_SCROLL).append(
                 $('<div>').addClass(CLASS_CONTENT)
             )
@@ -56,6 +67,7 @@
                 $('<div>').addClass(CLASS_CONTENT)
             )
         ),
+        $div = null,
         div_stick = '.' + CLASS_STICK + ' .' + CLASS_CONTENT,
         div_list = '.' + CLASS_LIST + ' .' + CLASS_CONTENT,
         _notice_events = [],
@@ -70,10 +82,12 @@
             var positions = settings_general.align.split(' ');
 
             if (positions.indexOf('top') >= 0) {
+                $div = $div_top;
                 $div.addClass('align-top');
             }
 
             if (positions.indexOf('bottom') >= 0) {
+                $div = $div_bottom;
                 $div.addClass('align-bottom');
             }
 
@@ -133,6 +147,14 @@
                         .append($('<span>').addClass(CLASS_ITEM_CONTENT))
                         .append($('<span>').addClass(CLASS_ITEM_CLOSE))
                 );
+
+                    if ( options.close_white ){
+                        obj.find('.' + CLASS_ITEM_CLOSE).addClass(CLASS_ITEM_CLOSE_WHITE);
+                    }
+
+                    if ( options.close_block ){
+                        obj.find('.' + CLASS_ITEM_CLOSE).addClass(CLASS_ITEM_CLOSE_BLOCK);
+                    }
 
                 if ( options.id ){
                     obj.prop('id','jq-notice-' + options.id);
