@@ -22,61 +22,53 @@
         CLASS_ITEM_WRAP = 'jq-notice-item-wrap',
         CLASS_ITEM = 'jq-notice-item',
         CLASS_ITEM_CONTENT = 'jq-notice-item-content',
-        CLASS_ITEM_CLOSE = 'jq-notice-item-close',
-        CLASS_INACTIVE = 'jq-inactive';
+        CLASS_ITEM_CLOSE = 'jq-notice-item-close';
 
-    var defaults = {
+    var defaults_general = {
+
             align: 'bottom right',
             shape: 'rounded',
             delay: 2000,
-            speed: 1000,
+            speed: 1000
+
+        }, settings_general = {},
+        defaults_notice = {
+
             stick: false,
-            priority: 'normal',
+
+            close_white: true,
+            close_block: true,
+
+            level: 'normal',
+
             url: null,
+            id: null,
+
             callback: function(){}
-        },
-        settings = {},
+
+        }, settings_notice = {},
         $div = $('<div>').addClass(CLASS_DIV).append(
-            $('<div>').addClass(CLASS_STICK).addClass(CLASS_SCROLL).addClass(CLASS_INACTIVE).append(
+            $('<div>').addClass(CLASS_STICK).addClass(CLASS_SCROLL).append(
                 $('<div>').addClass(CLASS_CONTENT)
             )
         ).append(
-            $('<div>').addClass(CLASS_LIST).addClass(CLASS_SCROLL).addClass(CLASS_INACTIVE).append(
+            $('<div>').addClass(CLASS_LIST).addClass(CLASS_SCROLL).append(
                 $('<div>').addClass(CLASS_CONTENT)
             )
         ),
         div_stick = '.' + CLASS_STICK + ' .' + CLASS_CONTENT,
         div_list = '.' + CLASS_LIST + ' .' + CLASS_CONTENT,
+        _notice_sticks = [],
         _notice_events = [],
         _notice_action = false;
 
-    $.notice = function(text,options) {
+    $.notice = function(options_general){
 
-        settings = $.extend({}, defaults, options);
-
-        setAlign();
-        setShape();
-
-        if ( ! $(CLASS_DIV).length ){
-            $('body').append($div);
-        }
-
-        var _notice = _notice_factory(text, settings.delay, settings.speed, settings.stick, settings.priority, settings.url, settings.callback);
-
-        if ( settings.stick ){
-            $(div_stick).append(_notice);
-            $('.' + CLASS_STICK).removeClass(CLASS_INACTIVE);
-        } else {
-            $(div_list).append(_notice);
-            $('.' + CLASS_LIST).removeClass(CLASS_INACTIVE);
-        }
-
-        if ( ! _notice_action ){ _notice_next(); }
-
+        settings_general = $.extend({}, defaults_general, options_general);
 
         function setAlign() {
 
-            var positions = settings.align.split(' ');
+            var positions = settings_general.align.split(' ');
 
             if (positions.indexOf('top') >= 0) {
                 $div.addClass('align-top');
@@ -98,7 +90,7 @@
 
         function setShape() {
 
-            var shape = settings.shape;
+            var shape = settings_general.shape;
 
             switch (shape) {
                 case 'square':
@@ -113,93 +105,100 @@
 
         }
 
-        function _notice_factory(text, delay, speed, stick, priority, url, callback) {
+        if ( ! $('.' + CLASS_DIV).length ){
+            setAlign();
+            setShape();
+            $('body').append($div);
+        }
 
-            var obj = $('<div>').addClass(CLASS_ITEM_WRAP)
-                .append($('<div>').addClass(CLASS_ITEM).addClass('priority-' + priority)
-                    .append($('<span>').addClass(CLASS_ITEM_CONTENT))
-                    .append($('<span>').addClass(CLASS_ITEM_CLOSE))
-            );
+        return function(text,options) {
 
-            if ( url ){
-                $('<a>').prop('href',url).text(text).appendTo( obj.find('.' + CLASS_ITEM_CONTENT) );
+            settings_notice = $.extend({}, defaults_notice, options);
+
+            var _notice = _notice_factory();
+
+            if ( settings_notice.stick ){
+                $(div_stick).append(_notice);
             } else {
-                obj.find('.' + CLASS_ITEM_CONTENT).text(text);
+                $(div_list).append(_notice);
             }
 
-            if ( stick ){
+            if ( ! _notice_action ){ _notice_next(); }
 
-                var obj_close = obj.children().children('.' + CLASS_ITEM_CLOSE);
+            function _notice_factory() {
 
-                obj_close.on('click.' + CLASS_ITEM_CLOSE, function(e) {
+                options = $.extend({}, settings_general, settings_notice);
 
-                    e.preventDefault();
+                var obj = $('<div>').addClass(CLASS_ITEM_WRAP)
+                    .append($('<div>').addClass(CLASS_ITEM).addClass('level-' + options.level)
+                        .append($('<span>').addClass(CLASS_ITEM_CONTENT))
+                        .append($('<span>').addClass(CLASS_ITEM_CLOSE))
+                );
 
-                    var _notice = $(this).parents('.' + CLASS_ITEM_WRAP);
+                if ( options.id ){
+                    obj.prop('id','jq-notice-' + options.id);
+                } else {
+                    obj.prop('id', 'jq-notice-' + $.now());
+                }
 
-                    _notice.animate({                   // Manual Remove, ToDO: Need more options
-                        opacity: 0
-                    }, speed, function(){
-                        obj.remove();                   // Step 1: remove html element
-                        callback();                     // Step 2: execute possible callback
-                        _notice_destroy();              // Step 3: execute destroyer
+                if ( options.url ){
+                    $('<a>').prop('href',options.url).text(text).appendTo( obj.find('.' + CLASS_ITEM_CONTENT) );
+                } else {
+                    obj.find('.' + CLASS_ITEM_CONTENT).text(text);
+                }
+
+                if ( options.stick ){
+
+                    var obj_close = obj.children().children('.' + CLASS_ITEM_CLOSE);
+
+                    obj_close.on('click.' + CLASS_ITEM_CLOSE, function(e) {
+
+                        e.preventDefault();
+
+                        var _notice = $(this).parents('.' + CLASS_ITEM_WRAP);
+
+                        _notice.animate({                   // Manual Remove, ToDO: Need more options
+                            opacity: 0
+                        }, options.speed, function(){
+                            obj.remove();                   // Step 1: remove html element
+                            options.callback();             // Step 2: execute possible callback
+                        });
+
                     });
 
-                });
 
+                } else {
 
-            } else {
+                    var fn = function(){                    // Automatic Remove, ToDO: Need more options
+                        obj.delay(options.delay).animate({
+                            opacity: 0
+                        }, options.speed, function(){
+                            _notice_events.splice(0,1);     // Step 1: remove event from tail and re-sort
+                            obj.remove();                   // Step 2: remove html element
+                            options.callback();             // Step 3: execute possible callback
+                            _notice_action = false;         // Step 4: update global flag ( executioner )
+                            _notice_next();                 // Step 5: execute next animation ( sequencer )
+                        });
+                    };
 
-                var fn = function(){                    // Automatic Remove, ToDO: Need more options
-                    obj.delay(delay).animate({
-                        opacity: 0
-                    }, speed, function(){
-                        _notice_events.splice(0,1);     // Step 1: remove event from tail and re-sort
-                        obj.remove();                   // Step 2: remove html element
-                        callback();                     // Step 3: execute possible callback
-                        _notice_action = false;         // Step 4: update global flag ( executioner )
-                        _notice_next();                 // Step 5: execute next animation ( sequencer )
-                        _notice_destroy();              // Step 6: execute destroyer
-                    });
-                };
+                    _notice_events.push(fn);
 
-                _notice_events.push(fn);
+                }
+
+                return obj
 
             }
 
-            return obj
-
-        }
-
-        function _notice_next(){
-            if ( _notice_events.length ) {
-                _notice_action = true;
-                _notice_events[0]();
-            } else {
-                _notice_action = false;
-            }
-        }
-
-        function _notice_destroy(){
-
-            var _list = false,
-                _stick = false;
-
-            if ( ! $( '.' + CLASS_STICK).find( '.' + CLASS_ITEM).length ) {
-                $('.' + CLASS_STICK).addClass(CLASS_INACTIVE);
-                _stick = true;
+            function _notice_next(){
+                if ( _notice_events.length ) {
+                    _notice_action = true;
+                    _notice_events[0]();
+                } else {
+                    _notice_action = false;
+                }
             }
 
-            if ( ! _notice_events.length ) {
-                $('.' + CLASS_LIST).addClass(CLASS_INACTIVE);
-                _list = true;
-            }
-
-            if ( _stick && _list ) {
-                $div.remove();
-            }
-
-        }
+        };
 
     };
 

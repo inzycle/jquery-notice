@@ -41,10 +41,17 @@
 
         $(document).ready(function(){
 
+            var $notice = $.notice({
+                align: 'bottom right',
+                shape: 'rounded',
+                delay: 2000,
+                speed: 1000
+            });
+
             $('.notice_stick .add_new_high').on('click', function(){
 
-                $.notice('Test Notice: testing MOOOOO \n And more MOOOO',{
-                    priority: 'high',
+                $notice('Test Notice: testing MOOOOO \n And more MOOOO',{
+                    level: 'high',
                     stick: true,
                     url: 'http://www.google.com/',
                     callback: function(){ console.log('Finished: stick + high') }
