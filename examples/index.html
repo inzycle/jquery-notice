@@ -61,8 +61,8 @@
 
             $('.notice_stick .add_new_normal').on('click', function(){
 
-                $.notice('Test Notice',{
-                    priority: 'normal',
+                $notice('Test Notice',{
+                    level: 'normal',
                     stick: true,
                     callback: function(){ console.log('Finished: stick + normal') }
                 });
@@ -71,8 +71,8 @@
 
             $('.notice_stick .add_new_low').on('click', function(){
 
-                $.notice('Test Notice',{
-                    priority: 'low',
+                $notice('Test Notice',{
+                    level: 'low',
                     stick: true,
                     callback: function(){ console.log('Finished: stick + low') }
                 });
@@ -81,8 +81,8 @@
 
             $('.notice_normal .add_new_high').on('click', function(){
 
-                $.notice('Test Notice',{
-                    priority: 'high',
+                $notice('Test Notice',{
+                    level: 'high',
                     url: 'http://www.google.com/',
                     callback: function(){ console.log('Finished: list + high') }
                 });
@@ -91,8 +91,8 @@
 
             $('.notice_normal .add_new_normal').on('click', function(){
 
-                $.notice('Test Notice',{
-                    priority: 'normal',
+                $notice('Test Notice',{
+                    level: 'normal',
                     callback: function(){ console.log('Finished: list + normal') }
                 });
 
@@ -100,8 +100,8 @@
 
             $('.notice_normal .add_new_low').on('click', function(){
 
-                $.notice('Test Notice',{
-                    priority: 'low',
+                $notice('Test Notice',{
+                    level: 'low',
                     callback: function(){ console.log('Finished: list + low') }
                 });
 
