@@ -1,2 +1,3 @@
-# jquery-notice
-A better "notification" plugin for jQuery
+# jQuery Notice
+
+A better "notification" plugin for jQuery.

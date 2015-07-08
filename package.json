@@ -1,0 +1,50 @@
+{
+  "name": "jquery-notice",
+  "version": "0.5.1",
+  "title": "jQuery Notice",
+  "description": "jQuery Notifications made easy",
+  "keywords": [
+    "jquery",
+    "notification",
+    "notice",
+    "notify"
+  ],
+  "homepage": "https://github.com/inzycle/jquery-notice",
+  "author": {
+    "name": "inZycle",
+    "url": "http://www.inzycle.com"
+  },
+  "contributors": [
+    {
+      "name": "Salvador Saldana",
+      "url": "https://www.inzycle.com"
+    },
+    {
+      "name": "Pablo Rosales",
+      "url": "https://www.pablorosales.xyz"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/inzycle/jquery-notice.git"
+  },
+  "bugs": "https://github.com/inzycle/jquery-notice/issues",
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ],
+  "main": "js/jquery.notice.js",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-cssmin": "~0.12.3",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-uglify": "~0.4.0",
+    "grunt-contrib-watch": "~0.6.0"
+  }
+}
